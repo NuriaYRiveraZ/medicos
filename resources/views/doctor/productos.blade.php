@@ -26,7 +26,7 @@
 
 <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Productos y Medicamentos') }}
+            {{ __('Productos') }}
         </h2>
 </x-slot>
 
@@ -119,7 +119,6 @@
                 <div class="mt-4">
                     <x-input-label for="tipo" :value="__('Tipo')" />
                     <select id="tipo" name="tipo" class="block mt-1 w-full" required>
-                        <option value="Medicamento">Medicamento</option>
                         <option value="Producto">Producto</option>
                     </select>
                     <x-input-error :messages="$errors->get('tipo')" class="mt-2" />
@@ -182,7 +181,6 @@
                     <label for="edit-tipo" class="block text-sm font-medium text-gray-900 dark:text-gray-300">Tipo</label>
                     <select id="edit-tipo" name="tipo" class="block mt-1 w-full text-sm dark:text-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" required>
                         <option value="Producto">Producto</option>
-                        <option value="Medicamento">Medicamento</option>
                     </select>
                 </div>
                 <div class="mt-4">
@@ -225,9 +223,7 @@
 <!-- Modal para eliminar productos -->
 <div id="eliminar-product-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
-        <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                     Eliminar Producto
@@ -239,12 +235,9 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <!-- Modal body -->
             <form method="POST" action="{{ route('productos.destroy', ['id' => 0]) }}" class="p-4 md:p-5" id="delete-product-form">
                 @csrf
                 @method('DELETE')
-
-                <!-- Nombre del Producto -->
                 <div class="mt-4">
                     <x-input-label for="delete_product_id" :value="__('Nombre del Producto')" />
                     <select id="delete_product_id" name="delete_product_id" class="block mt-1 w-full">
@@ -255,7 +248,6 @@
                     </select>
                     <x-input-error :messages="$errors->get('delete_product_id')" class="mt-2" />
                 </div>
-
                 <div class="flex items-center justify-end mt-4">
                     <button type="submit" class="text-white inline-flex items-center bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
                         Eliminar

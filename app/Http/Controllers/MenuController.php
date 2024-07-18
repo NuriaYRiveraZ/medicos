@@ -7,6 +7,7 @@ use App\Models\Servicio;
 use App\Models\Patient;
 use App\Models\User;
 use App\Models\Producto;
+use App\Models\Medicamento;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -122,5 +123,15 @@ class MenuController extends Controller
             return view('doctor.calendario', compact('events', 'appointments', 'pacientes'));
         }
     }
-    
+
+    public function medicamentos()
+    {
+        if (auth()->user()->tipo === 'secretaria') {
+            return view('secretaria.medicamentos');
+        } elseif (auth()->user()->tipo === 'doctor') {
+            $medicamentos = Medicamento::all();
+            return view('doctor.medicamentos', compact('medicamentos'));
+        }
+    }
+
 }

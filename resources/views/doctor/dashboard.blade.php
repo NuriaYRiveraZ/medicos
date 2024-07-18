@@ -55,9 +55,7 @@
                                     <th scope="col" class="px-6 py-3">Fecha</th>
                                     <th scope="col" class="px-6 py-3">Hora</th>
                                     <th scope="col" class="px-6 py-3">Teléfono</th>
-                        
-                                    <!-- <th scope="col" class="px-6 py-3">Consultar</th> -->
-
+                                    <th scope="col" class="px-6 py-3">Consultar</th> 
                                 </tr>
                             </thead>
                             <tbody>
@@ -72,13 +70,6 @@
                                         <td class="px-6 py-4">{{ $agenda->fecha }}</td>
                                         <td class="px-6 py-4">{{ $agenda->hora }}</td>
                                         <td class="px-6 py-4">{{ $agenda->telefono }}</td>
-                                        <!-- <td class="px-6 py-4">
-                                            <form method="GET" action="{{ route('consultas.show', $agenda->id) }}">
-                                                @csrf
-                                                <button type="submit" class="btn-custom focus:outline-none">
-                                                    Consultar
-                                                </button>
-                                                 -->
                                             </form>
                                         </td>
                                     </tr>

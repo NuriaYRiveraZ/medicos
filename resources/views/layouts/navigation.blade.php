@@ -34,9 +34,13 @@
                             {{ __('Pacientes') }}
                         </x-nav-link>
 
+                        <x-nav-link :href="route('medicamentos')" :active="request()->routeIs('medicamentos')">
+                            {{ __('Medicamentos') }}
+                        </x-nav-link>
+
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
                             <x-nav-link :href="route('productos')" :active="request()->routeIs('productos')">
-                                {{ __('Productos / Medicamentos') }}
+                                {{ __('Productos') }}
                             </x-nav-link>
 
                             <x-nav-link :href="route('servicios')" :active="request()->routeIs('servicios')" class="ml-4">

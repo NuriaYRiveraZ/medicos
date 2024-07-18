@@ -84,5 +84,8 @@ class PatientController extends Controller
 
         return redirect()->route('patients.create')->with('error', 'Paciente no encontrado.');
     }
+
+
+
 }
 

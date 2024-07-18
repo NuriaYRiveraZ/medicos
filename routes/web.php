@@ -9,7 +9,7 @@ use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ProductoController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\MedicamentoController;
 use App\Http\Controllers\ConsultaController;
 
 Route::get('/doctor/consultas', [ConsultaController::class, 'index'])->name('doctor.consultas');
@@ -43,7 +43,7 @@ Route::get('/usuarios', [MenuController::class, 'usuarios'])->middleware(['auth'
 Route::get('/calendario', [MenuController::class, 'calendario'])->middleware(['auth', 'verified'])->name('calendario');
 Route::get('/consultas', [MenuController::class, 'consultas'])->middleware(['auth', 'verified'])->name('consultas');
 Route::get('/servicios', [MenuController::class, 'servicios'])->middleware(['auth', 'verified'])->name('servicios');
-
+Route::get('/medicamentos', [MenuController::class, 'medicamentos'])->middleware(['auth', 'verified'])->name('medicamentos');
 //Productos:
 Route::get('/productos/create', [ProductoController::class, 'create'])->name('productos.create');
 Route::post('/productos/store', [ProductoController::class, 'store'])->name('productos.store');
@@ -64,6 +64,13 @@ Route::patch('/patients/{id}', [PatientController::class, 'update'])->name('pati
 
 Route::get('/dashboard', [MenuController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/consultas/{id}', [ConsultaController::class, 'show'])->name('consultas.show');
+
+
+//Medicamentos:
+Route::get('/medicamentos/create', [MedicamentoController::class, 'create'])->name('medicamentos.create');
+Route::post('/medicamentos/store', [MedicamentoController::class, 'store'])->name('medicamentos.store');
+Route::delete('/medicamentos/{id}', [MedicamentoController::class, 'destroy'])->name('medicamentos.destroy');
+Route::patch('/medicamentos/{id}', [MedicamentoController::class, 'update'])->name('medicamentos.update');
 
 
 require __DIR__.'/auth.php';
