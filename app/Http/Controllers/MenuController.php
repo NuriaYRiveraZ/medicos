@@ -134,4 +134,14 @@ class MenuController extends Controller
         }
     }
 
+    public function consulta($id)
+    {
+        $paciente = Patient::find($id);
+        $servicios = Servicio::all(); 
+        $medicamentos = Medicamento::all(); 
+        $productos = Producto::all();
+        return view('doctor.consulta', compact('paciente', 'servicios', 'medicamentos', 'productos'));
+    }
+
+    
 }

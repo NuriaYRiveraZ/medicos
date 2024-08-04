@@ -70,7 +70,8 @@
                                         <td class="px-6 py-4">{{ $agenda->fecha }}</td>
                                         <td class="px-6 py-4">{{ $agenda->hora }}</td>
                                         <td class="px-6 py-4">{{ $agenda->telefono }}</td>
-                                            </form>
+                                        <td class="px-6 py-4">
+                                            <a href="{{ route('consulta', $paciente->id) }}" class="text-indigo-600 hover:text-indigo-900">Consultar</a>
                                         </td>
                                     </tr>
                                 @endforeach

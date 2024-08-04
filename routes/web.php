@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedicamentoController;
 use App\Http\Controllers\ConsultaController;
 
-Route::get('/doctor/consultas', [ConsultaController::class, 'index'])->name('doctor.consultas');
+
 
 // Servicios:
 Route::middleware(['auth'])->group(function () {
@@ -63,7 +63,6 @@ Route::delete('/patients/{id}', [PatientController::class, 'destroy'])->name('pa
 Route::patch('/patients/{id}', [PatientController::class, 'update'])->name('patients.update');
 
 Route::get('/dashboard', [MenuController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/consultas/{id}', [ConsultaController::class, 'show'])->name('consultas.show');
 
 
 //Medicamentos:
@@ -71,6 +70,13 @@ Route::get('/medicamentos/create', [MedicamentoController::class, 'create'])->na
 Route::post('/medicamentos/store', [MedicamentoController::class, 'store'])->name('medicamentos.store');
 Route::delete('/medicamentos/{id}', [MedicamentoController::class, 'destroy'])->name('medicamentos.destroy');
 Route::patch('/medicamentos/{id}', [MedicamentoController::class, 'update'])->name('medicamentos.update');
+
+
+Route::get('/consulta/{id}', [MenuController::class, 'consulta'])->name('consulta');
+
+
+
+Route::post('/terminar-consulta', [CitaController::class, 'terminarConsulta'])->name('terminarConsulta');
 
 
 require __DIR__.'/auth.php';

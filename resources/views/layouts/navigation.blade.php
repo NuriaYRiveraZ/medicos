@@ -47,10 +47,6 @@
                                 {{ __('Servicios') }}
                             </x-nav-link>
                         </div>
-    
-                        <x-nav-link :href="route('consultas')" :active="request()->routeIs('consultas')">
-                            {{ __('Consultas') }}
-                        </x-nav-link>
 
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                                     {{ __('Citas') }}

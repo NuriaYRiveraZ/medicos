@@ -12,11 +12,10 @@ class ConsultaController extends Controller
     public function index()
     {
         $servicios = Servicio::all(); 
+        $productos = Producto::all();
         $medicamentos = Medicamento::where('Medicamento')->get();
 
 
-        return view('doctor.consultas', compact('servicios', 'medicamentos'));
+        return view('doctor.consultas', compact('servicios', 'medicamentos','productos'));
     }
-
-
 }
