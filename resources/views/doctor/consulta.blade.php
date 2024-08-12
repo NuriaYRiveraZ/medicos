@@ -1,6 +1,7 @@
 <x-app-layout>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
     <style>
         .btn-custom {
             background-color: #203d4a;
@@ -32,6 +33,7 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100 flex justify-between items-center">
                         <span>{{ __("Consulta") }}</span>
+
                         <form method="POST" action="{{ route('terminarConsulta') }}" id="terminarConsultaForm">
                             @csrf
                             <input type="hidden" name="id_paciente_citas" value="{{ $paciente->id }}">
@@ -50,7 +52,6 @@
                             
                             <button type="submit" class="btn-custom focus:outline-none">Terminar consulta</button>
                         </form>
-
                     </div>
                     <div class="p-6">
                         <div class="flex items-center mb-4">
@@ -417,4 +418,108 @@
                             });
                         });
                     </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<button id="downloadPdf" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Ver y Descargar PDF</button>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const { jsPDF } = window.jspdf;
+    const downloadPdfBtn = document.getElementById('downloadPdf');
+
+    downloadPdfBtn.addEventListener('click', function () {
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const margin = 20;
+        let y = 40; // Comenzamos más abajo para dejar espacio al logo
+
+        // Dejar espacio para el logo
+        pdf.text('(Espacio para logo del hospital)', margin, 20);
+
+        // Detalles del paciente
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'normal');
+        const pacienteInfo = document.querySelector('.text-sm.text-gray-500').textContent.split('\n');
+        const fechaNacimiento = pacienteInfo[0].replace('Fecha de Nacimiento:', '').trim();
+        const genero = pacienteInfo[1].replace('Género:', '').trim();
+
+        pdf.text(`Nombre: ${document.querySelector('.text-lg.leading-6').textContent.trim().replace('Paciente:', '')}`, margin, y);
+        pdf.text(`Fecha: ${new Date().toLocaleDateString()}`, pageWidth / 2, y);
+        y += 6;
+        pdf.text(`Fecha de Nacimiento: ${fechaNacimiento}`, margin, y);
+        pdf.text(`Género: ${genero}`, pageWidth / 2, y);
+
+        // Signos vitales
+        y += 10;
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Signos Vitales', margin, y);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(11);
+        y += 5;
+        const signosVitales = document.getElementById('summary').innerHTML.split('<p>');
+        signosVitales.shift(); // Eliminar el primer elemento vacío
+        signosVitales.forEach(signo => {
+            const signoText = signo.replace('</p>', '').trim();
+            pdf.text(signoText, margin, y += 5);
+        });
+
+        // Motivo de consulta
+        y += 10;
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Motivo de Consulta', margin, y);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(11);
+        y += 5;
+        const motivoConsulta = document.getElementById('motivoConsultaResumen').querySelector('p').textContent;
+        const splitMotivo = pdf.splitTextToSize(motivoConsulta, pageWidth - 2 * margin);
+        pdf.text(splitMotivo, margin, y);
+        y += splitMotivo.length * 5;
+
+        // Medicamentos, Servicios y Productos
+        ['medicamentos', 'servicios', 'productos'].forEach(tipo => {
+            y += 10;
+            pdf.setFontSize(12);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(tipo.charAt(0).toUpperCase() + tipo.slice(1), margin, y);
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(11);
+            y += 5;
+            const items = document.getElementById(tipo).querySelectorAll('p');
+            items.forEach(item => {
+                const itemText = item.textContent;
+                const splitItem = pdf.splitTextToSize(itemText, pageWidth - 2 * margin);
+                pdf.text(splitItem, margin, y);
+                y += splitItem.length * 5;
+            });
+        });
+
+        // Total a pagar
+        y += 10;
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(document.getElementById('totalPagar').textContent, margin, y);
+
+        // Pie de página
+        pdf.setLineWidth(0.5);
+        pdf.line(margin, 277, pageWidth - margin, 277);
+        pdf.setFontSize(10);
+        pdf.text('Firma:', margin, 282);
+        pdf.text('IDX:', margin, 287);
+
+        // Abrir en nueva pestaña
+        const blobPDF = pdf.output('blob');
+        const blobUrl = URL.createObjectURL(blobPDF);
+        window.open(blobUrl, '_blank');
+    });
+});
+</script>
+
+
+
 </x-app-layout>

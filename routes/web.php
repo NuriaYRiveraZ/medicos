@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedicamentoController;
 use App\Http\Controllers\ConsultaController;
 
-
-
 // Servicios:
 Route::middleware(['auth'])->group(function () {
     Route::get('/servicios/create', [ServicioController::class, 'create'])->name('servicios.create');
@@ -64,17 +62,13 @@ Route::patch('/patients/{id}', [PatientController::class, 'update'])->name('pati
 
 Route::get('/dashboard', [MenuController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-
 //Medicamentos:
 Route::get('/medicamentos/create', [MedicamentoController::class, 'create'])->name('medicamentos.create');
 Route::post('/medicamentos/store', [MedicamentoController::class, 'store'])->name('medicamentos.store');
 Route::delete('/medicamentos/{id}', [MedicamentoController::class, 'destroy'])->name('medicamentos.destroy');
 Route::patch('/medicamentos/{id}', [MedicamentoController::class, 'update'])->name('medicamentos.update');
 
-
 Route::get('/consulta/{id}', [MenuController::class, 'consulta'])->name('consulta');
-
-
 
 Route::post('/terminar-consulta', [CitaController::class, 'terminarConsulta'])->name('terminarConsulta');
 
