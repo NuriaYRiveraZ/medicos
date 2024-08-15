@@ -5,9 +5,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCitasTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up()
     {
         Schema::create('citas', function (Blueprint $table) {
@@ -22,14 +20,11 @@ class CreateCitasTable extends Migration
             $table->float('saturacion')->nullable();
             $table->text('motivo_consulta')->nullable();
             $table->string('estado_pago')->default('no pagado');
-            $table->float('total_pagar')->nullable(); // Add this line for total amount
+            $table->float('total_pagar')->nullable(); 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down()
     {
         Schema::dropIfExists('citas');

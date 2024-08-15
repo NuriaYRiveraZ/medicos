@@ -25,6 +25,12 @@
                         <x-nav-link :href="route('usuarios')" :active="request()->routeIs('usuarios')">
                             {{ __('Empleados') }}
                         </x-nav-link> 
+
+                        <x-nav-link :href="route('secretaria.pagos')" :active="request()->routeIs('secretaria.pagos')">
+                            {{ __('Pagos') }}
+                        </x-nav-link>
+                        
+
                     @elseif (auth()->user()->tipo === 'doctor')
                         <x-nav-link :href="route('calendario')" :active="request()->routeIs('calendario')">
                             {{ __('Agenda') }}

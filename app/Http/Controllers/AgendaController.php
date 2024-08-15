@@ -73,5 +73,33 @@ class AgendaController extends Controller
 
         return redirect()->route('dashboard')->with('success', 'Cita marcada como desatendida.');
     }
+
+    public function index()
+{
+    // Marcar como atendidas las citas de fechas anteriores a la actual
+    $today = Carbon::today();
+    DB::table('agendas')
+        ->where('fecha', '<', $today)
+        ->update(['atendida' => true]);
+
+    // Obtener las citas para hoy y el futuro
+    $appointments = DB::table('agendas')
+        ->where('fecha', '>=', $today)
+        ->orderBy('fecha', 'asc')
+        ->get();
+
+    // Convertir citas a un formato compatible con FullCalendar
+    $events = $appointments->map(function ($appointment) {
+        return [
+            'title' => $appointment->title,
+            'start' => $appointment->fecha . 'T' . $appointment->hora,
+            'extendedProps' => [
+                'phone' => $appointment->telefono,
+            ],
+        ];
+    });
+
+    return view('agendas.index', compact('appointments', 'events'));
+}
 }
 

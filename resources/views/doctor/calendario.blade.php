@@ -101,9 +101,10 @@
                     <!-- Fecha -->
                     <div class="mt-4">
                         <x-input-label for="fecha" :value="__('Fecha')" />
-                        <x-text-input id="fecha" class="block mt-1 w-full" type="date" name="fecha" :value="old('fecha')" required />
+                        <x-text-input id="fecha" class="block mt-1 w-full" type="date" name="fecha" :value="old('fecha')" required min="{{ date('Y-m-d') }}" />
                         <x-input-error :messages="$errors->get('fecha')" class="mt-2" />
                     </div>
+
 
                     <!-- Hora -->
                     <div class="mt-4">

@@ -4,42 +4,42 @@
             {{ __('Pagos') }}
         </h2>
     </x-slot>
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @if($pacientes->isEmpty())
-                    <p class="text-center text-lg">No existen pagos pendientes</p>
+                        <p class="text-center text-lg">No existen pagos pendientes</p>
                     @else
-                    <table class="min-w-full">
-                        <thead>
-                            <tr>
-                                <th class="px-6 py-3 text-center">Nombre</th>
-                                <th class="px-6 py-3 text-center">Total a Pagar</th>
-                                <th class="px-6 py-3 text-center">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pendingPaymentsTable">
-                            @foreach($pacientes as $paciente)
-                            <tr class="text-center">
-                                <td class="px-6 py-4">{{ $paciente->nombre_completo }}</td>
-                                <td class="px-6 py-4">{{ $paciente->total_pagar }}</td>
-                                <td class="px-6 py-4">
-                                    <button class="btn-custom"
-                                        onclick="openPaymentModal('{{ $paciente->id }}', '{{ $paciente->total_pagar }}')">
-                                        Completar Pago
-                                    </button>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                        <table class="min-w-full">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-center">Nombre</th>
+                                    <th class="px-6 py-3 text-center">Total a Pagar</th>
+                                    <th class="px-6 py-3 text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingPaymentsTable">
+                                @foreach($pacientes as $paciente)
+                                <tr class="text-center">
+                                    <td class="px-6 py-4">{{ $paciente->nombre_completo }}</td>
+                                    <td class="px-6 py-4">{{ $paciente->total_pagar }}</td>
+                                    <td class="px-6 py-4">
+                                        <button class="btn-custom"
+                                            onclick="openPaymentModal('{{ $paciente->id }}', '{{ $paciente->total_pagar }}')">
+                                            Completar Pago
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     @endif
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- Payment Modal -->
     <div id="paymentModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
@@ -191,7 +191,6 @@
             })
         }
 
-
         function moveToPaidTable(patientId) {
             const row = document.querySelector(`button[onclick*="${patientId}"]`).closest('tr');
             const paidTable = document.getElementById('paidPaymentsTable');
@@ -200,81 +199,55 @@
         }
 
         function generatePDFReceipt(patientId, paymentType, amountGiven = null) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({
-                unit: 'mm',
-                format: [80, 200]
-            });
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        unit: 'mm',
+        format: [70, 160]
+    });
 
-            // Establecer fuentes personalizadas si es necesario
-            doc.setFont('helvetica');
+    // Colors
+    const headerColor = [26, 188, 156];  // Teal
+    const textColor = [44, 62, 80];      // Dark blue
+    const separatorColor = [149, 165, 166]; // Gray
 
-            // Encabezado con nombre y detalles del establecimiento
-            doc.setFontSize(14);
-            doc.setTextColor(44, 62, 80); // Color azul oscuro
-            doc.text('HEAVEN MEDICAL SOLUTIONS', 10, 10);
+    // Header
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(headerColor[0], headerColor[1], headerColor[2]);
+    doc.text('Heaven Medical Center', 35, 10, { align: 'center' });
 
-            // Separador
-            doc.setLineWidth(0.5);
-            doc.setDrawColor(100); // Color gris oscuro
-            doc.line(10, 35, 70, 35);
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+    doc.text('RECIBO DE PAGO', 35, 18, { align: 'center' });
 
-            // Detalles del cliente
-            doc.setFontSize(10);
-            doc.setTextColor(44, 62, 80); // Color azul oscuro
-            doc.text(`CLIENTE ID: ${patientId}`, 10, 45);
-            doc.setTextColor(100); // Color gris oscuro
-            doc.text('NOMBRE CLIENTE: NOMBRECLIENTE', 10, 55);
+    // Patient Information
+    doc.setFontSize(9);
+    doc.text('Paciente ID: ' + patientId, 10, 30);
+    doc.text('Método de Pago: ' + (paymentType === 'cash' ? 'Efectivo' : 'Tarjeta'), 10, 36);
 
-            // Separador
-            doc.setLineWidth(0.5);
-            doc.setDrawColor(100); // Color gris oscuro
-            doc.line(10, 65, 70, 65);
+    // Payment Details
+    doc.text('TOTAL: $' + parseFloat(document.getElementById('paymentModal').dataset.total).toFixed(2), 10, 60);
 
-            // Detalles de la compra
-            doc.setFontSize(10);
-            doc.setTextColor(44, 62, 80); // Color azul oscuro
-            doc.text('ARTICULO    CANT     TOTAL', 10, 75);
-            doc.setTextColor(100); // Color gris oscuro
-            doc.text('Consultas   1        ' + parseFloat(document.getElementById('paymentModal').dataset.total).toFixed(2), 10, 85);
+    if (paymentType === 'cash') {
+        const changeDue = amountGiven - parseFloat(document.getElementById('paymentModal').dataset.total);
+        doc.text('RECIBIDO: $' + amountGiven.toFixed(2), 10, 75);
+        doc.text('DEVOLUCIÓN: $' + changeDue.toFixed(2), 10, 81);
+    }
 
-            // Separador
-            doc.setLineWidth(0.5);
-            doc.setDrawColor(100); // Color gris oscuro
-            doc.line(10, 95, 70, 95);
+    // Separator Line
+    doc.setLineWidth(0.3);
+    doc.setDrawColor(separatorColor[0], separatorColor[1], separatorColor[2]);
+    doc.line(10, 110, 60, 110);
 
-            // Resumen de la compra
-            doc.setFontSize(10);
-            doc.setTextColor(44, 62, 80); // Color azul oscuro
-            doc.text('CANT. ITEMS: 1', 10, 105);
-            doc.text('TOTAL COMPRA: $' + parseFloat(document.getElementById('paymentModal').dataset.total).toFixed(2), 10, 115);
+    // Thank You Note
+    doc.setFontSize(10);
+    doc.setTextColor(headerColor[0], headerColor[1], headerColor[2]);
+    doc.text('¡GRACIAS POR SU COMPRA!', 35, 125, { align: 'center' });
 
-            // Separador
-            doc.setLineWidth(0.5);
-            doc.setDrawColor(100); // Color gris oscuro
-            doc.line(10, 125, 70, 125);
-
-            // Detalles de pago si es efectivo
-            if (paymentType === 'cash') {
-                const changeDue = amountGiven - parseFloat(document.getElementById('paymentModal').dataset.total);
-                doc.setFontSize(10);
-                doc.setTextColor(44, 62, 80); // Color azul oscuro
-                doc.text('RECIBIDO: $' + amountGiven.toFixed(2), 10, 135);
-                doc.text('DEVOLUCION: $' + changeDue.toFixed(2), 10, 145);
-
-                // Separador
-                doc.setLineWidth(0.5);
-                doc.setDrawColor(100); // Color gris oscuro
-                doc.line(10, 175, 70, 175);
-
-                // Agradecimiento
-                doc.setFontSize(10);
-                doc.setTextColor(44, 62, 80); // Color azul oscuro
-                doc.text('GRACIAS POR SU COMPRA!', 10, 185);
-
-                // Guardar el documento PDF con un nombre específico
-                doc.save('recibo-pago.pdf');
-            }
+    // Save PDF
+    doc.save('recibo-pago.pdf');
+}
 
     </script>
 </x-app-layout>

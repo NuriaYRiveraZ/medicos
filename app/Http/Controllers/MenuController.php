@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\Agenda;
 use App\Models\Servicio;
 use App\Models\Patient;
@@ -9,6 +7,7 @@ use App\Models\User;
 use App\Models\Producto;
 use App\Models\Medicamento;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class MenuController extends Controller
 {
@@ -18,7 +17,7 @@ class MenuController extends Controller
             $agendas = Agenda::all();
             $pacientes = Patient::all();
             $servicios = Servicio::all();
-            return view('secretaria.dashboard', compact('agendas', 'pacientes'));
+            return view('secretaria.pacientes', compact('agendas', 'pacientes'));
         } elseif (auth()->user()->tipo === 'doctor') {
             $agendas = Agenda::all();
             $pacientes = Patient::all();
@@ -82,11 +81,18 @@ class MenuController extends Controller
     {
         $events = [];
         $appointments = [];
-        $pacientes = Patient::all(); 
+        $pacientes = Patient::all();
+        $today = Carbon::today();
+    
+        // Marcar como atendidas las citas de fechas anteriores a la actual
+        Agenda::where('fecha', '<', $today)
+              ->where('atendida', 0)
+              ->update(['atendida' => 1]);
+    
+        // Obtener las citas que no han sido atendidas
+        $agendas = Agenda::with(['patient'])->where('atendida', 0)->get();
     
         if (auth()->user()->tipo === 'paciente') {
-            $agendas = Agenda::with(['patient'])->where('atendida', 0)->get();
-            
             foreach ($agendas as $agenda) {
                 $events[] = [
                     'title' => 'Ocupado',
@@ -103,8 +109,6 @@ class MenuController extends Controller
             }
             return view('paciente.calendario', compact('events', 'appointments', 'pacientes'));
         } else {
-            $agendas = Agenda::with(['patient'])->where('atendida', 0)->get();
-            
             foreach ($agendas as $agenda) {
                 $events[] = [
                     'title' => $agenda->patient->nombre_completo,
@@ -142,6 +146,31 @@ class MenuController extends Controller
         $productos = Producto::all();
         return view('doctor.consulta', compact('paciente', 'servicios', 'medicamentos', 'productos'));
     }
-
     
+    public function pagos()
+    {
+        if (auth()->user()->tipo === 'secretaria') {
+            $pacientes = \DB::table('citas')
+                            ->join('pacientes', 'citas.id_paciente_citas', '=', 'pacientes.id')
+                            ->where('citas.estado_pago', 'no pagado')
+                            ->select('pacientes.id', 'pacientes.nombre_completo', 'citas.total_pagar')
+                            ->get();
+    
+            return view('secretaria.pagos', compact('pacientes'));
+        }
+    }
+    
+    public function completarPago($id)
+    {
+        $cita = \DB::table('citas')->where('id_paciente_citas', $id)->first();
+    
+        if ($cita) {
+            \DB::table('citas')->where('id_paciente_citas', $id)->update(['estado_pago' => 'pagado']);
+            return redirect()->back()->with('success', 'Pago completado exitosamente.');
+        }
+    
+        return redirect()->back()->with('error', 'Error al completar el pago.');
+    }
+
+
 }

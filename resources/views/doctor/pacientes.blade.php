@@ -24,6 +24,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>  
 </head>
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -304,7 +305,6 @@
     });
 </script>
 
-<!-- Codigo JS necesario para cuando se edita un paciente se autocompleten los datos -->
 <script>
     function updateEditPatientFields() {
         const select = document.getElementById('edit_id_paciente');
@@ -322,6 +322,4 @@
         form.action = "{{ url('/patients') }}/" + selectedOption.value;
     }
 </script>
-
-
 </x-app-layout>

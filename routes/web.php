@@ -42,6 +42,7 @@ Route::get('/calendario', [MenuController::class, 'calendario'])->middleware(['a
 Route::get('/consultas', [MenuController::class, 'consultas'])->middleware(['auth', 'verified'])->name('consultas');
 Route::get('/servicios', [MenuController::class, 'servicios'])->middleware(['auth', 'verified'])->name('servicios');
 Route::get('/medicamentos', [MenuController::class, 'medicamentos'])->middleware(['auth', 'verified'])->name('medicamentos');
+
 //Productos:
 Route::get('/productos/create', [ProductoController::class, 'create'])->name('productos.create');
 Route::post('/productos/store', [ProductoController::class, 'store'])->name('productos.store');
@@ -71,6 +72,17 @@ Route::patch('/medicamentos/{id}', [MedicamentoController::class, 'update'])->na
 Route::get('/consulta/{id}', [MenuController::class, 'consulta'])->name('consulta');
 
 Route::post('/terminar-consulta', [CitaController::class, 'terminarConsulta'])->name('terminarConsulta');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/secretaria/pagos', [MenuController::class, 'pagos'])->name('secretaria.pagos');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/secretaria/pagos', [MenuController::class, 'pagos'])->name('secretaria.pagos');
+});
+
+Route::post('/completar-pago/{id}', [MenuController::class, 'completarPago'])->name('completar.pago');
 
 
 require __DIR__.'/auth.php';

@@ -9,17 +9,17 @@
             border: none;
             outline: none;
             cursor: pointer;
-            width: auto; 
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
-            padding: 5px 10px; 
-            font-size: 15px; 
-            font-weight: 600; 
-            border-radius: 10px; 
+            width: auto;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            padding: 5px 10px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 10px;
             text-align: center;
         }
 
         .btn-custom:hover {
-            background-color: #1a3140; 
+            background-color: #1a3140;
         }
     </style>
     <x-slot name="header">
@@ -33,25 +33,6 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100 flex justify-between items-center">
                         <span>{{ __("Consulta") }}</span>
-
-                        <form method="POST" action="{{ route('terminarConsulta') }}" id="terminarConsultaForm">
-                            @csrf
-                            <input type="hidden" name="id_paciente_citas" value="{{ $paciente->id }}">
-                            <input type="hidden" name="peso" id="hiddenPesoInput">
-                            <input type="hidden" name="temperatura" id="hiddenTemperaturaInput">
-                            <input type="hidden" name="frecuencia_cardiaca" id="hiddenFrecuenciaInput">
-                            <input type="hidden" name="tension" id="hiddenTensionInput">
-                            <input type="hidden" name="talla" id="hiddenTallaInput">
-                            <input type="hidden" name="saturacion" id="hiddenSaturacionInput">
-                            <input type="hidden" name="motivo_consulta" id="hiddenMotivoConsulta">
-                            <input type="hidden" name="total" id="hiddenTotalInput">
-                            
-                            <div id="medicamentosHiddenInputs"></div>
-                            <div id="serviciosHiddenInputs"></div>
-                            <div id="productosHiddenInputs"></div>
-                            
-                            <button type="submit" class="btn-custom focus:outline-none">Terminar consulta</button>
-                        </form>
                     </div>
                     <div class="p-6">
                         <div class="flex items-center mb-4">
@@ -73,7 +54,8 @@
 
                     <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg mb-6">
                         <div class="px-4 py-5 sm:px-6">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">Signos vitales</h3>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">Signos vitales
+                            </h3>
                         </div>
                         <div class="border-t border-gray-200 dark:border-gray-700">
                             <dl class="grid grid-cols-2 gap-x-4 gap-y-8 px-4 py-5 sm:grid-cols-4 sm:px-6">
@@ -83,90 +65,124 @@
                                 </div>
                                 <div class="sm:col-span-1">
                                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Temperatura</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-200" id="temperaturaValue"> 0 °C</dd>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-200" id="temperaturaValue"> 0
+                                        °C</dd>
                                 </div>
                                 <div class="sm:col-span-1">
                                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Peso</dt>
                                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-200" id="pesoValue">0 kg </dd>
                                 </div>
                                 <div class="sm:col-span-1">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Saturación de oxígeno</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-200" id="saturacionValue">  0%</dd>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Saturación de
+                                        oxígeno</dt>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-200" id="saturacionValue"> 0%
+                                    </dd>
                                 </div>
                                 <div class="sm:col-span-1">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Frecuencia cardíaca</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-200" id="frecuenciaValue">0 bpm</dd>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Frecuencia cardíaca
+                                    </dt>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-200" id="frecuenciaValue">0 bpm
+                                    </dd>
                                 </div>
                                 <div class="sm:col-span-1">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tensión arterial</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-200" id="tensionValue">0/0 (mm/Hg)</dd>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tensión arterial
+                                    </dt>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-200" id="tensionValue">0/0
+                                        (mm/Hg)</dd>
                                 </div>
                                 <button id="editButton" class="btn-custom focus:outline-none">Editar</button>
                             </dl>
-                        </div>    
+                        </div>
                     </div>
-                    
-                    <!-- Modal -->
-                    <div id="signosVitalesModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
-                        <div
-                            class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-                            </div>
-                            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
-                            <div
-                                class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                    <div class="sm:flex sm:items-start">
-                                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200" id="modalTitle"> Editar Signos Vitales </h3>
-                                            <div class="mt-2">
-                                                <div class="grid grid-cols-2 gap-x-4 gap-y-4">
-                                                    <div>
-                                                        <label for="modalTallaInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Talla</label>
-                                                        <input type="text" id="modalTallaInput" class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                                    </div>
-                                                    <div>
-                                                        <label for="modalTemperaturaInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Temperatura</label>
-                                                        <input type="text" id="modalTemperaturaInput" class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                                    </div>
-                                                    <div>
-                                                        <label for="modalPesoInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Peso</label>
-                                                        <input type="text" id="modalPesoInput" class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                                    </div>
-                                                    <div>
-                                                        <label for="modalSaturacionInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Saturación de oxígeno</label>
-                                                        <input type="text" id="modalSaturacionInput" class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                                    </div>
-                                                    <div>
-                                                        <label for="modalFrecuenciaInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Frecuencia cardíaca</label>
-                                                        <input type="text" id="modalFrecuenciaInput" class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                                    </div>
-                                                    <div>
-                                                        <label for="modalTensionInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tensión arterial</label>
-                                                        <input type="text" id="modalTensionInput" class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+<!-- Modal -->
+<div id="signosVitalesModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+        <div
+            class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200"
+                            id="modalTitle"> Editar Signos Vitales </h3>
+                        <div class="mt-2">
+                            <div class="grid grid-cols-2 gap-x-4 gap-y-4">
+                                <div>
+                                    <label for="modalTallaInput"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Talla (cm)</label>
+                                    <input type="number" id="modalTallaInput" min="50" max="250"
+                                        class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                                 </div>
-                                <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                    <button id="modalSaveButton" type="button" class="btn-custom focus:outline-none" >Guardar</button>
-                                    <button id="modalCancelButton" type="button" class="btn-custom focus:outline-none">Cancelar</button>
+                                <div>
+                                    <label for="modalTemperaturaInput"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Temperatura (°C)</label>
+                                    <input type="number" step="0.1" min="35" max="42" id="modalTemperaturaInput"
+                                        class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="modalPesoInput"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Peso (kg)</label>
+                                    <input type="number" min="2" max="300" step="0.1" id="modalPesoInput"
+                                        class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="modalSaturacionInput"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Saturación de oxígeno (%)</label>
+                                    <input type="number" min="70" max="100" id="modalSaturacionInput"
+                                        class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="modalFrecuenciaInput"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Frecuencia cardíaca (bpm)</label>
+                                    <input type="number" min="30" max="200" id="modalFrecuenciaInput"
+                                        class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="modalTensionInput"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tensión arterial (mmHg)</label>
+                                    <input type="text" id="modalTensionInput" placeholder="120/80" maxlength="7"
+                                        class="mt-1 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button id="modalSaveButton" type="button"
+                    class="btn-custom focus:outline-none">Guardar</button>
+                <button id="modalCancelButton" type="button"
+                    class="btn-custom focus:outline-none">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+    const tensionInput = document.getElementById('modalTensionInput');
+
+    tensionInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+        if (value.length >= 3) {
+            value = value.slice(0, 3) + '/' + value.slice(3, 6);
+        }
+        e.target.value = value;
+    });
+</script>
 
                     <div class="">
                         <!-- Motivo de Consulta -->
                         <div class="border-t border-gray-200 dark:border-gray-700 p-4">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200 mb-4">Motivo de Consulta</h3>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200 mb-4">Motivo de
+                                Consulta</h3>
                             <textarea rows="3" placeholder="Describa el motivo de la consulta..."
                                 class="block w-full p-2.5 text-sm text-gray-900 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 id="motivoConsultaTextarea"></textarea>
-                            <button class="btn-custom mt-2 focus:outline-none" id="guardarMotivoConsulta">Guardar</button>
+                            <button class="btn-custom mt-2 focus:outline-none"
+                                id="guardarMotivoConsulta">Guardar</button>
                         </div>
                         <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg mb-6">
                             <div class="px-4 py-5 sm:px-6">
@@ -202,7 +218,8 @@
                                     <textarea rows="2" placeholder="Agregar notas..."
                                         class="block w-full p-2.5 mt-1 text-sm text-gray-900 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         id="notasMedicamento"></textarea>
-                                    <button class="btn-custom mt-2 focus:outline-none" id="agregarMedicamento">Agregar medicamento</button>
+                                    <button class="btn-custom mt-2 focus:outline-none" id="agregarMedicamento">Agregar
+                                        medicamento</button>
                                 </div>
                                 <!-- Servicios -->
                                 <div class="mb-4">
@@ -223,7 +240,8 @@
                                             class="block w-full p-2.5 mt-1 text-sm text-gray-900 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mx-2"
                                             id="cantidadServicio">
                                     </div>
-                                    <button class="btn-custom mt-2 focus:outline-none" id="agregarServicio">Agregar servicio</button>
+                                    <button class="btn-custom mt-2 focus:outline-none" id="agregarServicio">Agregar
+                                        servicio</button>
                                 </div>
                                 <!-- Productos -->
                                 <div class="mb-4">
@@ -244,15 +262,39 @@
                                             class="block w-full p-2.5 mt-1 text-sm text-gray-900 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mx-2"
                                             id="cantidadProducto">
                                     </div>
-                                    <button class="btn-custom mt-2 focus:outline-none" id="agregarProducto">Agregar producto</button>
+                                    <button class="btn-custom mt-2 focus:outline-none" id="agregarProducto">Agregar
+                                        producto</button>
                                 </div>
                                 <!-- Resumen -->
                                 <div class="mb-4">
-                                    <h4 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200 mb-4"> Resumen de Receta</h4>
+                                    <h4 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200 mb-4">
+                                        Resumen de Receta</h4>
                                     <div id="resumenReceta"></div>
                                 </div>
+                                <form method="POST" action="{{ route('terminarConsulta') }}" id="terminarConsultaForm">
+                                    @csrf
+                                    <input type="hidden" name="id_paciente_citas" value="{{ $paciente->id }}">
+                                    <input type="hidden" name="peso" id="hiddenPesoInput">
+                                    <input type="hidden" name="temperatura" id="hiddenTemperaturaInput">
+                                    <input type="hidden" name="frecuencia_cardiaca" id="hiddenFrecuenciaInput">
+                                    <input type="hidden" name="tension" id="hiddenTensionInput">
+                                    <input type="hidden" name="talla" id="hiddenTallaInput">
+                                    <input type="hidden" name="saturacion" id="hiddenSaturacionInput">
+                                    <input type="hidden" name="motivo_consulta" id="hiddenMotivoConsulta">
+                                    <input type="hidden" name="total" id="hiddenTotalInput">
+
+                                    <div id="medicamentosHiddenInputs"></div>
+                                    <div id="serviciosHiddenInputs"></div>
+                                    <div id="productosHiddenInputs"></div>
+                                    
+                                    <button type="submit" class="btn-custom focus:outline-none">Terminar
+                                        consulta</button>
+                                </form>
                             </div>
+                            <button id="downloadPdf" class="btn-custom focus:outline-none">Descargar receta</button>
+                        
                         </div>
+
                     </div>
 
                     <script>
@@ -345,9 +387,9 @@
 
 
                             function actualizarTotal() {
-                            document.getElementById('totalPagar').textContent = `Total a Pagar: $${total.toFixed(2)}`;
-                            document.getElementById('hiddenTotalInput').value = total.toFixed(2); /* agregue esto */
-                        }
+                                document.getElementById('totalPagar').textContent = `Total a Pagar: $${total.toFixed(2)}`;
+                                document.getElementById('hiddenTotalInput').value = total.toFixed(2); /* agregue esto */
+                            }
 
 
                             agregarMedicamentoBtn.addEventListener('click', function () {
@@ -418,108 +460,74 @@
                             });
                         });
                     </script>
+                    
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const { jsPDF } = window.jspdf;
+                            const downloadPdfBtn = document.getElementById('downloadPdf');
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<button id="downloadPdf" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Ver y Descargar PDF</button>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const { jsPDF } = window.jspdf;
-    const downloadPdfBtn = document.getElementById('downloadPdf');
+                            downloadPdfBtn.addEventListener('click', function () {
+                                const pdf = new jsPDF({
+                                    orientation: 'portrait',
+                                    unit: 'mm',
+                                    format: 'a4'
+                                });
 
-    downloadPdfBtn.addEventListener('click', function () {
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4'
-        });
+                                const pageWidth = pdf.internal.pageSize.getWidth();
+                                const margin = 20; // Set margins
+                                let y = 50; // Adjust the initial Y to start below the header
 
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const margin = 20;
-        let y = 40; // Comenzamos más abajo para dejar espacio al logo
+                                // Adding stylized title for 'Heaven Medical Solutions'
+                                pdf.setFontSize(16);
+                                pdf.setFont('helvetica', 'bold');
+                                pdf.setTextColor('#cc0000');
+                                pdf.text('HEAVEN MEDICAL SOLUTIONS', (pageWidth / 2), 20, { align: 'center' });
+                                pdf.setTextColor('#333333');
+                                pdf.text('Receta Médica', (pageWidth / 2), 28, { align: 'center' });
 
-        // Dejar espacio para el logo
-        pdf.text('(Espacio para logo del hospital)', margin, 20);
+                                // Reset text color for normal content
+                                pdf.setTextColor(0, 0, 0);
+                                pdf.setFontSize(11);
+                                pdf.setFont('helvetica', 'normal');
 
-        // Detalles del paciente
-        pdf.setFontSize(11);
-        pdf.setFont('helvetica', 'normal');
-        const pacienteInfo = document.querySelector('.text-sm.text-gray-500').textContent.split('\n');
-        const fechaNacimiento = pacienteInfo[0].replace('Fecha de Nacimiento:', '').trim();
-        const genero = pacienteInfo[1].replace('Género:', '').trim();
+                                const nombrePaciente = "{{ $paciente->nombre_completo }}";
+                                const fechaNacimiento = "{{ $paciente->fecha_nacimiento }}";
+                                const genero = "{{ $paciente->genero }}";
+                                pdf.text(`Nombre del Paciente: ${nombrePaciente}`, margin, y);
+                                y += 6;
+                                pdf.text(`Fecha de Nacimiento: ${fechaNacimiento}`, margin, y);
+                                y += 6;
+                                pdf.text(`Género: ${genero}`, margin, y);
+                                y += 10;
 
-        pdf.text(`Nombre: ${document.querySelector('.text-lg.leading-6').textContent.trim().replace('Paciente:', '')}`, margin, y);
-        pdf.text(`Fecha: ${new Date().toLocaleDateString()}`, pageWidth / 2, y);
-        y += 6;
-        pdf.text(`Fecha de Nacimiento: ${fechaNacimiento}`, margin, y);
-        pdf.text(`Género: ${genero}`, pageWidth / 2, y);
+                                const motivoConsultaResumen = document.getElementById('motivoConsultaResumen').innerText;
+                                const signosVitalesResumen = document.getElementById('summary').innerText;
+                                const medicamentos = document.getElementById('medicamentos').innerText;
+                                const servicios = document.getElementById('servicios').innerText;
+                                const productos = document.getElementById('productos').innerText;
+                                const totalPagar = document.getElementById('totalPagar').innerText;
 
-        // Signos vitales
-        y += 10;
-        pdf.setFontSize(12);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('Signos Vitales', margin, y);
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(11);
-        y += 5;
-        const signosVitales = document.getElementById('summary').innerHTML.split('<p>');
-        signosVitales.shift(); // Eliminar el primer elemento vacío
-        signosVitales.forEach(signo => {
-            const signoText = signo.replace('</p>', '').trim();
-            pdf.text(signoText, margin, y += 5);
-        });
+                                // Add content directly without titles
+                                const contents = [motivoConsultaResumen, signosVitalesResumen, medicamentos, servicios, productos];
 
-        // Motivo de consulta
-        y += 10;
-        pdf.setFontSize(12);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('Motivo de Consulta', margin, y);
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(11);
-        y += 5;
-        const motivoConsulta = document.getElementById('motivoConsultaResumen').querySelector('p').textContent;
-        const splitMotivo = pdf.splitTextToSize(motivoConsulta, pageWidth - 2 * margin);
-        pdf.text(splitMotivo, margin, y);
-        y += splitMotivo.length * 5;
+                                contents.forEach(content => {
+                                    const contentLines = pdf.splitTextToSize(content, pageWidth - 2 * margin);
+                                    contentLines.forEach(line => {
+                                        pdf.text(line, margin, y);
+                                        y += 5;
+                                    });
+                                    y += 6; // Add extra space after each content
+                                });
 
-        // Medicamentos, Servicios y Productos
-        ['medicamentos', 'servicios', 'productos'].forEach(tipo => {
-            y += 10;
-            pdf.setFontSize(12);
-            pdf.setFont('helvetica', 'bold');
-            pdf.text(tipo.charAt(0).toUpperCase() + tipo.slice(1), margin, y);
-            pdf.setFont('helvetica', 'normal');
-            pdf.setFontSize(11);
-            y += 5;
-            const items = document.getElementById(tipo).querySelectorAll('p');
-            items.forEach(item => {
-                const itemText = item.textContent;
-                const splitItem = pdf.splitTextToSize(itemText, pageWidth - 2 * margin);
-                pdf.text(splitItem, margin, y);
-                y += splitItem.length * 5;
-            });
-        });
+                                // Total to Pay
+                                pdf.setFontSize(12);
+                                pdf.setFont('helvetica', 'bold');
+                                pdf.text(`${totalPagar}`, margin, y);
+                                y += 10;
 
-        // Total a pagar
-        y += 10;
-        pdf.setFontSize(12);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text(document.getElementById('totalPagar').textContent, margin, y);
-
-        // Pie de página
-        pdf.setLineWidth(0.5);
-        pdf.line(margin, 277, pageWidth - margin, 277);
-        pdf.setFontSize(10);
-        pdf.text('Firma:', margin, 282);
-        pdf.text('IDX:', margin, 287);
-
-        // Abrir en nueva pestaña
-        const blobPDF = pdf.output('blob');
-        const blobUrl = URL.createObjectURL(blobPDF);
-        window.open(blobUrl, '_blank');
-    });
-});
-</script>
-
-
-
+                                pdf.save(`receta_medica_${nombrePaciente.replace(/\s+/g, '_').toLowerCase()}.pdf`);
+                            });
+                        });
+                    </script>
 </x-app-layout>
